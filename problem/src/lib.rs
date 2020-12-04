@@ -19,7 +19,10 @@ pub trait Problem {
 #[derive(Debug)]
 pub enum SolveError<P, E> {
     Io(io::Error),
-    Parse(P),
+    Parse {
+        line_number: usize,
+        error: P,
+    },
     SolvePart1(E),
     SolvePart2(E),
 }
@@ -32,8 +35,8 @@ impl<P, E> From<io::Error> for SolveError<P, E> {
 
 pub fn solve<P: Problem>(path: &str) -> Result<(P::Part1Output, P::Part2Output), SolveError<<P::Input as FromStr>::Err, P::Error>> {
     let input_file = BufReader::new(File::open(path)?);
-    let input = input_file.lines()
-        .map(|line| line?.parse().map_err(|e| SolveError::Parse(e)))
+    let input = input_file.lines().enumerate()
+        .map(|(line_number, line)| line?.parse().map_err(|error| SolveError::Parse { line_number: line_number + 1, error }))
         .collect::<Result<Vec<_>, _>>()?;
 
     let start = Instant::now();
