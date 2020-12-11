@@ -1,5 +1,3 @@
-#![feature(min_const_generics)]
-
 use std::fmt;
 use problem::{Problem, solve};
 use smallbitvec::SmallBitVec;
@@ -20,16 +18,16 @@ fn solve_2(values: &[i32], target: i32) -> Option<(i32, i32)> {
     None
 }
 
-struct Solution<const N: usize>([i32; N]);
+struct Solution<T>(T);
 
-impl<const N: usize> fmt::Display for Solution<N> {
+impl<T: AsRef<[i32]>> fmt::Display for Solution<T> {
     fn fmt<'a>(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut product = 1;
-        for &v in self.0.iter() {
+        for &v in self.0.as_ref().iter() {
             product *= v;
         }
         write!(f, "{}", product)?;
-        for (i, &v) in self.0.iter().enumerate() {
+        for (i, &v) in self.0.as_ref().iter().enumerate() {
             if i == 0 {
                 write!(f, " = {}", v)?;
             } else {
@@ -50,8 +48,8 @@ const TARGET: i32 = 2020;
 struct Day1;
 impl Problem for Day1 {
     type Input = i32;
-    type Part1Output = Solution<2>;
-    type Part2Output = Solution<3>;
+    type Part1Output = Solution<[i32; 2]>;
+    type Part2Output = Solution<[i32; 3]>;
     type Error = Error;
 
     fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
