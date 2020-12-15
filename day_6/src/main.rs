@@ -13,12 +13,12 @@ impl FromStr for Answers {
 
 struct Day6;
 impl Problem for Day6 {
-    type Input = Answers;
+    type Input = Vec<Answers>;
     type Part1Output = u32;
     type Part2Output = u32;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut total = 0;
         let mut acc = 0u32;
         for i in input {
@@ -35,7 +35,7 @@ impl Problem for Day6 {
         Ok(total)
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut total = 0;
         let mut acc = 0xffffffffu32;
         for i in input {

@@ -143,12 +143,12 @@ fn line_of_sight(grid: &Grid<Tile>, index: usize) -> Grid<Option<NonZeroI32>> {
 
 struct Day11;
 impl Problem for Day11 {
-    type Input = GridRow;
+    type Input = Vec<GridRow>;
     type Part1Output = usize;
     type Part2Output = usize;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut grid = Grid::new_with(input[0].tiles.len(), input.len(), |x, y| input[y as usize].tiles[x as usize]);
 
         while step_grid_neighbors(&mut grid) {}
@@ -156,7 +156,7 @@ impl Problem for Day11 {
         Ok(grid.enumerate().map(|(x, y)| grid.get(x, y)).filter(|&t| *t == Tile::Occupied).count())
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut grid = Grid::new_with(input[0].tiles.len(), input.len(), |x, y| input[y as usize].tiles[x as usize]);
         let line_of_sight_grids = (0..8).map(|i| line_of_sight(&grid, i)).collect::<Vec<_>>();
 

@@ -47,17 +47,17 @@ const TARGET: i32 = 2020;
 
 struct Day1;
 impl Problem for Day1 {
-    type Input = i32;
+    type Input = Vec<i32>;
     type Part1Output = Solution<[i32; 2]>;
     type Part2Output = Solution<[i32; 3]>;
     type Error = Error;
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let (a, b) = solve_2(input.as_slice(), TARGET).ok_or(Error::NoSolution)?;
         Ok(Solution([a, b]))
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         for (i, &v) in input.iter().enumerate() {
             if let Some((a, b)) = solve_2(&input[i + 1..], TARGET - v) {
                 return Ok(Solution([v, a, b]));

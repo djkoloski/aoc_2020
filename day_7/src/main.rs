@@ -242,12 +242,12 @@ impl FromStr for Rule {
 
 struct Day7;
 impl Problem for Day7 {
-    type Input = Rule;
+    type Input = Vec<Rule>;
     type Part1Output = usize;
     type Part2Output = usize;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut graph = HashMap::new();
 
         for i in input {
@@ -274,7 +274,7 @@ impl Problem for Day7 {
         Ok(visited.len())
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut graph = HashMap::new();
         for i in input {
             graph.insert(i.outer.clone(), i.inner.clone());

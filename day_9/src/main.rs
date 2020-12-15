@@ -20,12 +20,12 @@ fn solve_2(values: &[i64], target: i64) -> Option<(i64, i64)> {
 
 struct Day9;
 impl Problem for Day9 {
-    type Input = i64;
+    type Input = Vec<i64>;
     type Part1Output = i64;
     type Part2Output = i64;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         const PREAMBLE_LEN: usize = 25;
 
         for i in PREAMBLE_LEN..input.len() {
@@ -39,7 +39,7 @@ impl Problem for Day9 {
         Err(())
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let target = Self::part_1(input)?;
 
         let mut range = Range {

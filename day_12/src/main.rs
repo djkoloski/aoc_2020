@@ -74,12 +74,12 @@ impl FromStr for Action {
 
 struct Day12;
 impl Problem for Day12 {
-    type Input = Action;
+    type Input = Vec<Action>;
     type Part1Output = i32;
     type Part2Output = i32;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         const OFFSET_X: [i32; 4] = [1, 0, -1, 0];
         const OFFSET_Y: [i32; 4] = [0, 1, 0, -1];
 
@@ -105,7 +105,7 @@ impl Problem for Day12 {
         Ok(i32::abs(x) + i32::abs(y))
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut x = 0;
         let mut y = 0;
         let mut wx = 10;

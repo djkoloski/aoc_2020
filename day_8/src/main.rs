@@ -47,12 +47,12 @@ enum Reachable {
 
 struct Day8;
 impl Problem for Day8 {
-    type Input = Instruction;
+    type Input = Vec<Instruction>;
     type Part1Output = i32;
     type Part2Output = i32;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut pc = 0;
         let mut acc = 0;
         let mut visited = vec![false; input.len()];
@@ -77,7 +77,7 @@ impl Problem for Day8 {
         }
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut reachability = vec![Reachable::Neither; input.len()];
 
         let mut pc = 0;

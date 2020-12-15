@@ -41,16 +41,16 @@ impl FromStr for Position {
 
 struct Day5;
 impl Problem for Day5 {
-    type Input = Position;
+    type Input = Vec<Position>;
     type Part1Output = u32;
     type Part2Output = usize;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         input.iter().map(|i| i.x + i.y * 8).max().ok_or(())
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut found = vec![false; 128 * 8];
         for i in input {
             let index = i.x + i.y * 8;

@@ -2,12 +2,12 @@ use problem::{Problem, solve};
 
 struct Day10;
 impl Problem for Day10 {
-    type Input = i32;
+    type Input = Vec<i32>;
     type Part1Output = u32;
     type Part2Output = u64;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         let mut sorted = input.clone();
         sorted.push(0);
         sorted.as_mut_slice().sort();
@@ -26,7 +26,7 @@ impl Problem for Day10 {
         Ok(count_1 * count_3)
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         let mut sorted = input.clone();
         sorted.push(0);
         sorted.as_mut_slice().sort();

@@ -343,16 +343,16 @@ fn count_valid_passports(input: &Vec<PassportLine>, validate: bool) -> Result<us
 
 struct Day4;
 impl Problem for Day4 {
-    type Input = PassportLine;
+    type Input = Vec<PassportLine>;
     type Part1Output = usize;
     type Part2Output = usize;
     type Error = ();
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         count_valid_passports(input, false)
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         count_valid_passports(input, true)
     }
 }

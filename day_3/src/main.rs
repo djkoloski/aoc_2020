@@ -54,16 +54,16 @@ fn hit_trees(input: &Vec<TreeLine>, slope_x: usize, slope_y: usize) -> usize {
 
 struct Day3;
 impl Problem for Day3 {
-    type Input = TreeLine;
+    type Input = Vec<TreeLine>;
     type Part1Output = usize;
     type Part2Output = usize;
     type Error = Error;
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         Ok(hit_trees(input, 3, 1))
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         Ok(
             hit_trees(input, 1, 1)
             * hit_trees(input, 3, 1)

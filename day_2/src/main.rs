@@ -54,16 +54,16 @@ enum Error {}
 
 struct Day2;
 impl Problem for Day2 {
-    type Input = Input;
+    type Input = Vec<Input>;
     type Part1Output = usize;
     type Part2Output = usize;
     type Error = Error;
 
-    fn part_1(input: &Vec<Self::Input>) -> Result<Self::Part1Output, Self::Error> {
+    fn part_1(input: &Self::Input) -> Result<Self::Part1Output, Self::Error> {
         Ok(input.iter().filter(|i| i.is_valid()).count())
     }
 
-    fn part_2(input: &Vec<Self::Input>) -> Result<Self::Part2Output, Self::Error> {
+    fn part_2(input: &Self::Input) -> Result<Self::Part2Output, Self::Error> {
         Ok(input.iter().filter(|i| i.is_valid_2()).count())
     }
 }
