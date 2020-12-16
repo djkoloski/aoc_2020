@@ -43,6 +43,46 @@ where
     }
 }
 
+pub struct One<T>(pub T);
+
+#[derive(Debug)]
+pub enum OneError<T> {
+    IoError(io::Error),
+    NoInput,
+    ParseError(T),
+}
+
+impl<T> From<io::Error> for OneError<T> {
+    fn from(e: io::Error) -> Self {
+        OneError::IoError(e)
+    }
+}
+
+impl<T: FromStr> Input for One<T>
+where
+    T::Err: Debug,
+{
+    type Error = OneError<T::Err>;
+
+    fn parse<R: BufRead>(reader: R) -> Result<Self, Self::Error> {
+        Ok(One(reader.lines().next().ok_or(OneError::NoInput)??.parse().map_err(|e| OneError::ParseError(e))?))
+    }
+}
+
+pub struct CSV<T> {
+    pub values: Vec<T>,
+}
+
+impl<T: FromStr> FromStr for CSV<T> {
+    type Err = T::Err;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self {
+            values: s.split(',').map(|x| x.parse()).collect::<Result<_, _>>()?,
+        })
+    }
+}
+
 pub trait Problem {
     type Input: Input;
     type Part1Output: Display;
