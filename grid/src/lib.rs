@@ -1,3 +1,4 @@
+#[derive(Clone, Debug)]
 pub struct Grid<T> {
     width: usize,
     height: usize,
@@ -46,9 +47,15 @@ impl<T> Grid<T> {
         }
     }
 
-    pub fn set(&mut self, x: i32, y: i32, value: T) {
+    pub fn get_mut(&mut self, x: i32, y: i32) -> &mut T {
+        self.try_get_mut(x, y).unwrap()
+    }
+
+    pub fn try_get_mut(&mut self, x: i32, y: i32) -> Option<&mut T> {
         if self.contains(x, y) {
-            self.values[x as usize + y as usize * self.width] = value;
+            Some(&mut self.values[x as usize + y as usize * self.width])
+        } else {
+            None
         }
     }
 
@@ -71,6 +78,93 @@ impl<T> Grid<T> {
             x,
             y,
             index: 0,
+        }
+    }
+
+    pub fn rotate_ccw(&mut self) {
+        assert_eq!(self.width, self.height);
+
+        let size = self.width;
+        for x in 0..(size / 2) {
+            let tx = size - x - 1;
+            for y in 0..(size / 2) {
+                let ty = size - y - 1;
+                let indices = [
+                    x + y * size,
+                    ty + x * size,
+                    tx + ty * size,
+                    y + tx * size,
+                ];
+                self.values.swap(indices[0], indices[1]);
+                self.values.swap(indices[0], indices[2]);
+                self.values.swap(indices[0], indices[3]);
+            }
+        }
+    }
+
+    pub fn rotate_half(&mut self) {
+        assert_eq!(self.width, self.height);
+
+        let size = self.width;
+        for x in 0..(size / 2) {
+            let tx = size - x - 1;
+            for y in 0..size {
+                let ty = size - y - 1;
+                self.values.swap(x + y * size, tx + ty * size);
+            }
+        }
+    }
+
+    pub fn rotate_cw(&mut self) {
+        assert_eq!(self.width, self.height);
+
+        let size = self.width;
+        for x in 0..(size / 2) {
+            let tx = size - x - 1;
+            for y in 0..(size / 2) {
+                let ty = size - y - 1;
+                let indices = [
+                    x + y * size,
+                    ty + x * size,
+                    tx + ty * size,
+                    y + tx * size,
+                ];
+                self.values.swap(indices[0], indices[3]);
+                self.values.swap(indices[0], indices[2]);
+                self.values.swap(indices[0], indices[1]);
+            }
+        }
+    }
+
+    pub fn flip_horiz(&mut self) {
+        for x in 0..(self.width / 2) {
+            let tx = self.width - x - 1;
+            for y in 0..self.height {
+                self.values.swap(x + y * self.width, tx + y * self.width);
+            }
+        }
+    }
+
+    pub fn flip_vert(&mut self) {
+        for x in 0..self.width {
+            for y in 0..(self.height / 2) {
+                let ty = self.height - y - 1;
+                self.values.swap(x + y * self.width, x + ty * self.width);
+            }
+        }
+    }
+}
+
+impl<T: Clone> Grid<T> {
+    pub fn slice(&self, x: i32, y: i32, width: usize, height: usize) -> Self {
+        Self::new_with(width, height, |dx, dy| self.get(x + dx, y + dy).clone())
+    }
+
+    pub fn blit(&mut self, x: i32, y: i32, other: &Grid<T>) {
+        for dx in 0..other.width {
+            for dy in 0..other.height {
+                *self.get_mut(x + dx as i32, y + dy as i32) = other.get(dx as i32, dy as i32).clone();
+            }
         }
     }
 }

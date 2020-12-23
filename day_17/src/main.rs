@@ -1,6 +1,6 @@
 use std::io;
 use grid::Grid;
-use problem::{Input, Problem, solve};
+use problem::{ProblemInput, Problem, solve};
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 enum State {
@@ -30,7 +30,7 @@ impl From<io::Error> for ParseStateError {
     }
 }
 
-impl Input for InitialState {
+impl ProblemInput for InitialState {
     type Error = ParseStateError;
 
     fn parse<R: io::BufRead>(reader: R) -> Result<Self, Self::Error> {
@@ -43,7 +43,7 @@ impl Input for InitialState {
                     '#' => State::Active,
                     c => return Err(ParseStateError::InvalidChar(c)),
                 };
-                grid.set(x as i32, y as i32, state);
+                *grid.get_mut(x as i32, y as i32) = state;
             }
         }
 

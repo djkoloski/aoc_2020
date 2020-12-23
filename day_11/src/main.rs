@@ -94,13 +94,13 @@ fn step_grid(grid: &mut Grid<Tile>, neighbors: &Grid<usize>, threshold: usize) -
             Tile::Floor => (),
             Tile::Empty => {
                 if *neighbors.get(x, y) == 0 {
-                    grid.set(x, y, Tile::Occupied);
+                    *grid.get_mut(x, y) = Tile::Occupied;
                      changed = true;
                  }
             },
             Tile::Occupied => {
                 if *neighbors.get(x, y) >= threshold {
-                    grid.set(x, y, Tile::Empty);
+                    *grid.get_mut(x, y) = Tile::Empty;
                     changed = true;
                  }
             },

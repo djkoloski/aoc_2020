@@ -1,5 +1,5 @@
 use std::{io, num};
-use problem::{Input, Problem, solve};
+use problem::{ProblemInput, Problem, solve};
 
 struct Schedule {
     pub departure_time: u64,
@@ -26,7 +26,7 @@ impl From<num::ParseIntError> for ParseScheduleError {
     }
 }
 
-impl Input for Schedule {
+impl ProblemInput for Schedule {
     type Error = ParseScheduleError;
 
     fn parse<R: io::BufRead>(reader: R) -> Result<Self, Self::Error> {

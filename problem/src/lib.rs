@@ -6,7 +6,7 @@ use std::{
     time::Instant,
 };
 
-pub trait Input: Sized {
+pub trait ProblemInput: Sized {
     type Error: Debug;
 
     fn parse<R: BufRead>(reader: R) -> Result<Self, Self::Error>;
@@ -27,7 +27,7 @@ impl<T> From<io::Error> for ParseLinesError<T> {
     }
 }
 
-impl<T: FromStr> Input for Vec<T>
+impl<T: FromStr> ProblemInput for Vec<T>
 where
     T::Err: Debug,
 {
@@ -58,7 +58,7 @@ impl<T> From<io::Error> for OneError<T> {
     }
 }
 
-impl<T: FromStr> Input for One<T>
+impl<T: FromStr> ProblemInput for One<T>
 where
     T::Err: Debug,
 {
@@ -84,7 +84,7 @@ impl<T: FromStr> FromStr for CSV<T> {
 }
 
 pub trait Problem {
-    type Input: Input;
+    type Input: ProblemInput;
     type Part1Output: Display;
     type Part2Output: Display;
     type Error;
@@ -107,7 +107,7 @@ impl<P, E> From<io::Error> for SolveError<P, E> {
     }
 }
 
-pub fn solve<P: Problem>(path: &str) -> Result<(P::Part1Output, P::Part2Output), SolveError<<P::Input as Input>::Error, P::Error>> {
+pub fn solve<P: Problem>(path: &str) -> Result<(P::Part1Output, P::Part2Output), SolveError<<P::Input as ProblemInput>::Error, P::Error>> {
     let input_file = BufReader::new(File::open(path)?);
     let input = P::Input::parse(input_file).map_err(|e| SolveError::ParseInput(e))?;
 

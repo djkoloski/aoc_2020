@@ -1,6 +1,6 @@
 use std::{collections::HashSet, io, num::ParseIntError, str::FromStr};
 
-use problem::{CSV, Input, Problem, solve};
+use problem::{CSV, ProblemInput, Problem, solve};
 
 struct TicketField {
     name: String,
@@ -52,14 +52,14 @@ impl FromStr for TicketField {
 
 type Ticket = CSV<u32>;
 
-struct Info {
+struct Input {
     fields: Vec<TicketField>,
     your_ticket: Ticket,
     nearby_tickets: Vec<Ticket>,
 }
 
 #[derive(Debug)]
-enum ParseInfoError {
+enum ParseInputError {
     IoError(io::Error),
     ParseTicketFieldError(ParseTicketFieldError),
     ParseIntError(ParseIntError),
@@ -68,26 +68,26 @@ enum ParseInfoError {
     MissingNearbyTickets,
 }
 
-impl From<io::Error> for ParseInfoError {
+impl From<io::Error> for ParseInputError {
     fn from(e: io::Error) -> Self {
         Self::IoError(e)
     }
 }
 
-impl From<ParseTicketFieldError> for ParseInfoError {
+impl From<ParseTicketFieldError> for ParseInputError {
     fn from(e: ParseTicketFieldError) -> Self {
         Self::ParseTicketFieldError(e)
     }
 }
 
-impl From<ParseIntError> for ParseInfoError {
+impl From<ParseIntError> for ParseInputError {
     fn from(e: ParseIntError) -> Self {
         Self::ParseIntError(e)
     }
 }
 
-impl Input for Info {
-    type Error = ParseInfoError;
+impl ProblemInput for Input {
+    type Error = ParseInputError;
 
     fn parse<R: io::BufRead>(reader: R) -> Result<Self, Self::Error> {
         let mut lines = reader.lines();
@@ -95,23 +95,23 @@ impl Input for Info {
         let mut fields = Vec::new();
 
         loop {
-            let next = lines.next().ok_or(ParseInfoError::UnexpectedEndOfInput)??;
+            let next = lines.next().ok_or(ParseInputError::UnexpectedEndOfInput)??;
             if next == "" {
                 break;
             }
             fields.push(next.parse()?);
         }
 
-        if lines.next().ok_or(ParseInfoError::UnexpectedEndOfInput)?? != "your ticket:" {
-            return Err(ParseInfoError::MissingYourTicket);
+        if lines.next().ok_or(ParseInputError::UnexpectedEndOfInput)?? != "your ticket:" {
+            return Err(ParseInputError::MissingYourTicket);
         }
 
-        let your_ticket = lines.next().ok_or(ParseInfoError::UnexpectedEndOfInput)??.parse()?;
+        let your_ticket = lines.next().ok_or(ParseInputError::UnexpectedEndOfInput)??.parse()?;
 
         lines.next();
 
-        if lines.next().ok_or(ParseInfoError::UnexpectedEndOfInput)?? != "nearby tickets:" {
-            return Err(ParseInfoError::MissingNearbyTickets);
+        if lines.next().ok_or(ParseInputError::UnexpectedEndOfInput)?? != "nearby tickets:" {
+            return Err(ParseInputError::MissingNearbyTickets);
         }
 
         let mut nearby_tickets = Vec::new();
@@ -130,7 +130,7 @@ impl Input for Info {
 
 struct Day16;
 impl Problem for Day16 {
-    type Input = Info;
+    type Input = Input;
     type Part1Output = u32;
     type Part2Output = u64;
     type Error = ();
