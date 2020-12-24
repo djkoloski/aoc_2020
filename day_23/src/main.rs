@@ -1,6 +1,4 @@
-use std::{collections::LinkedList, io, iter, num};
-
-use num::ParseIntError;
+use std::{io, num};
 use problem::{Problem, ProblemInput, solve};
 
 struct Input {
